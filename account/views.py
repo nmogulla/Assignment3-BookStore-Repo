@@ -34,6 +34,21 @@ def account_register(request):
     return render(request, 'account/registration/register.html', {'form': registerForm})
 
 
+def user_profile(request):
+    #user = User.objects.filter(pk=pk)
+    #profileForm = ViewProfileForm(request.POST, instance=User.objects.get(pk=pk))
+    #return render(request, 'account/registration/profile.html', {'user_form': profileForm})
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+        if user_form.is_valid():
+            user_form.save()
+        return redirect('storage:products_list')
+    else:
+        user_form = UserEditForm(instance=request.user)
+    return render(request,
+                  'account/registration/profile.html', {'user_form': user_form})
+
+
 def user_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
